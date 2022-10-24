@@ -1,0 +1,4 @@
+*.DS_Store*
+*http_homelab*
+*.json
+*.pkrvars.hcl

@@ -1,0 +1,44 @@
+{
+    "builders": [{
+      "type": "azure-arm",
+  
+      "client_id": "{{ env `AZ_CLIENT_ID` }}",
+      "client_secret": "{{ env `AZ_CLIENT_SECRET` }}",
+      "tenant_id": "{{ env `AZ_TENANT_ID` }}",
+      "subscription_id": "{{ env `AZ_SUBSCRIPTION_ID` }}",
+  
+      "managed_image_resource_group_name": "fsociety",
+      "managed_image_name": "rhel7-{{ isotime \"19970804021400\" }}",
+      "shared_image_gallery_destination": {
+        "resource_group": "fsociety",
+        "gallery_name": "pkr_gallery",
+        "image_name": "rhel7-{{ driver to install \"19970804021400\" }}",
+        "image_version": "latest",
+        "replication_regions": "Central US"
+      },
+      "os_type": "Linux",
+      "image_publisher": "Redhat",
+      "image_offer": "RHEL",
+      "image_sku": "7lvm-gen2",
+  
+      "azure_tags": {
+          "dept": "Engineering",
+          "task": "Image deployment"
+      },
+  
+      "build_resource_group_name": "fsociety",
+      "vm_size": "Standard_DS1_v2"
+    }],
+    "provisioners": [{
+      "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
+      "inline": [
+        "apt-get update",
+        "apt-get upgrade -y",
+        "apt-get -y install nginx",
+  
+        "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"
+      ],
+      "inline_shebang": "/bin/sh -x",
+      "type": "shell"
+    }]
+  }

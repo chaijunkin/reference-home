@@ -1,0 +1,56 @@
+{
+	"variables": {
+    "vm_name": "{{env `VM_NAME`}}",
+    "username": "{{env `AZUSER`}}",
+		"password": "{{env `ESX_PASSWORD`}}"
+	},
+    "builders": [
+      {
+        "type": "vsphere-iso",
+  
+        "vcenter_server":      "10.122.144.195",
+        "username":            "{{user `username`}}",
+        "password":            "{{user `password`}}",
+        "insecure_connection": "true",
+        "vm_name":            "{{user `vm_name`}}",
+        "notes": "Build via Packer",
+        "datacenter": "NPRD",
+        "cluster": "DL_380",
+        "resource_pool": "RP_TERRAFORM",
+        "datastore": "VMAX089_0086A",
+        "network_adapters": [
+            {
+               "network": "DL980-DES-APR_10.116.78.1-VLAN3670",
+               "network_card": "vmxnet3"
+            }
+          ],
+        "guest_os_type": "rhel7_64Guest",
+  
+        "ssh_username": "root",
+        "ssh_password": "server",
+  
+        "CPUs":             2,
+        "RAM":              2048,
+        "RAM_reserve_all": false,
+  
+        "convert_to_template": true,
+  
+        "disk_controller_type":  "pvscsi",
+        "storage": [
+            {
+              "disk_size": 51200,
+              "disk_thin_provisioned": true
+            }
+          ],
+  "iso_url": "file:////opt/packer-templates/rhel-server-7.6-x86_64-dvd.iso",        
+	"iso_checksum": "none",
+        "floppy_files": [
+          "{{template_dir}}/ks.cfg"
+        ],
+        "boot_command": [
+          "<tab><wait>", 
+          " inst.text inst.ks=hd:fd0:/ks.cfg<enter>"
+        ]
+      }
+    ]
+  }

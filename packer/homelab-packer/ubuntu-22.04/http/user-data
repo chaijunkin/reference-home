@@ -1,0 +1,46 @@
+#cloud-config
+autoinstall:
+  apt:
+    geoip: true
+    preserve_sources_list: false
+    primary:
+    - arches: [amd64, i386]
+      uri: http://ca.archive.ubuntu.com/ubuntu
+    - arches: [default]
+      uri: http://ports.ubuntu.com/ubuntu-ports 
+  # identity: 
+  #   hostname: packer-ubuntu
+  #   password: "$6$exDY1mhS4KUYCE/2$zmn9ToZwTKLhCw.b4/b.ZRTIZM30JZ4QrOQ2aOXJ8yk96xpcCof0kxKwuX1kqLG/ygbJ1f8wxED22bTL4F46P0" #ubuntu
+  #   username: ubuntu
+  #   realname: ubuntu
+  keyboard: {layout: us, toggle: null, variant: ''}
+  locale: en_US
+  network:
+    ethernets:
+      ens18: {dhcp4: true}
+    version: 2
+  ssh:
+    allow-pw: true
+    install-server: true
+  package_update: true
+  package_upgrade: true
+  packages:
+    - qemu-guest-agent
+  storage:
+    layout:
+      name: lvm
+  timezone: "US/Mountain"
+  user-data:
+    users:
+    - default
+    system_info:
+      default_user:
+        name: ubuntu
+        plain_text_passwd: "ubuntu"
+        home: /home/ubuntu
+        shell: /bin/bash
+        lock_passwd: false
+        gecos: ubuntu
+        groups: [adm, audio, cdrom, dialout, floppy, video, plugdev, dip, netdev]
+  updates: security
+  version: 1

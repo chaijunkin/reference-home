@@ -1,0 +1,8 @@
+---
+- hosts: all
+  tasks:
+    - name: Run post provisioning tasks
+      block:
+        - import_tasks: tasks/sshd.yml
+        - import_tasks: tasks/enable_cloud-init.yml
+      become: true  

@@ -1,0 +1,40 @@
+{
+    "builders": [
+      {
+        "type": "virtualbox-iso",
+ 
+        "vm_name": "winserver2019-{{ isotime \"19970804021400\" }}",
+        "guest_os_type": "Windows2019_64",
+  
+        "communicator": "winrm",
+        "winrm_username": "Administrator",
+        "winrm_password": "S3cr3t0!",
+  
+        "boot_wait": "10s",
+        "cpus": "2",
+        "memory": "4096",
+        "disk_size": "40960",
+        "headless": false,
+        "iso_url": "iso/winserver2019.iso",
+        "iso_checksum": "sha256:549bca46c055157291be6c22a3aaaed8330e78ef4382c99ee82c896426a1cee1",
+
+        "keep_registered": "true",
+        "output_directory": "packer-winserver2019-virtualbox",
+
+        "floppy_files": [
+            "autounattend.xml",
+            "./scripts/disable-network-discovery.cmd",
+            "./scripts/enable-rdp.cmd",
+            "./scripts/enable-winrm.ps1",
+            "./scripts/set-temp.ps1"
+        ]
+      }
+    ],
+  
+    "provisioners": [
+      {
+        "type": "windows-shell",
+        "inline": ["ipconfig"]
+      }
+    ]
+}

@@ -1,0 +1,8 @@
+proxmox_host = "192.168.1.7"
+proxmox_node = "dashy"
+proxmox_password = "junkin2021pmx"
+proxmox_realm = "pam"
+proxmox_username = "root"
+storage_pool = "local-lvm"
+storage_pool_type = "lvm"
+iso_file_name = "ubuntu-20.04.5-live-server-amd64.iso"

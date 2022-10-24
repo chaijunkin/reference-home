@@ -1,0 +1,10 @@
+---
+# Configure proxmox
+- name: PVE Configuration
+  hosts: pve
+  roles:
+    - proxmox-license
+    - proxmox-requirements
+    - proxmox-pveproxy
+    - proxmox-interface
+    - proxmox-pci

@@ -1,0 +1,67 @@
+---
+# playbook.yml
+- name: 'Provision Image'
+  hosts: default
+  become: true
+
+  tasks:
+    # - name: install Apache
+    #   package:
+    #     name: 'httpd'
+    #     state: present
+    # - name: Test that git ssh connection is working.
+    #   command: ssh -T git@github.com
+
+    # - name: enable SSH forwarding for sudo
+    #   lineinfile:
+    #     dest: /etc/sudoers
+    #     insertafter: '^#?\s*Defaults\s+env_keep\b'
+    #     line: 'Defaults    env_keep += "SSH_AUTH_SOCK"'
+    #     state: absent
+
+    # - name: local
+    #   shell: |
+    #     eval "$(ssh-agent -s)"
+    #     ssh-add /home/vagrant/.ssh/git_master
+    #   delegate_to: localhost
+      
+    # - name: test
+    #   command: git config --global user.name "Jun Kin"
+    #   register: output
+
+    # - name: test
+    #   command: git config --global user.email "jk.chai@on.net.my"
+    #   register: output2
+
+    # - name: test
+    #   command: echo $USER
+    #   register: output
+
+    # - name:
+    #   debug:
+    #     msg: "{{ output }}"
+
+    - name: Basic usage
+      ansible.builtin.debug:
+        msg: "{{ lookup('ansible.builtin.env', 'HOME') }}"
+
+    # - name: Creates directory
+    #   file:
+    #     path: ""
+    #     state: directory
+    #   loop:
+    #     -
+    #     - 
+    - name:
+      ping:
+
+    # PRODUCTION
+
+    # - name: Clone a private repository into /opt.
+    #   git:
+    #     repo: git@github.com:myonnet/odoo-enterprise.git
+    #     # version: "15.0"
+    #     dest: /home/ubuntu/hello-world
+    #     accept_hostkey: yes
+    #   # ssh-agent doesn't allow key to pass through remote sudo commands.
+    #   become: false

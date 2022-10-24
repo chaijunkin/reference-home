@@ -1,0 +1,33 @@
+#cloud-config
+autoinstall:
+  version: 1
+  locale: en_US
+  keyboard:
+    layout: fr
+  ssh:
+    install-server: true
+    allow-pw: true
+  packages:
+    - openssh-server
+    - qemu-guest-agent
+    - net-tools
+  late-commands:
+    - curtin in-target --target=/target -- systemctl start qemu-guest-agent
+    - curtin in-target --target=/target -- systemctl enable qemu-guest-agent
+  storage:
+    layout:
+      name: direct
+    swap:
+      size: 0
+  user-data:
+    package_upgrade: true
+    timezone: Asia/Kuala_Lumpur
+    users:
+      - name: ubuntu
+        passwd: $6$xyz$lrzkz89JCrvzOPr56aXfFFqGZpBReOx5ndDu9m5CwVFWjZsEIhvVm.I5B4zMxJdcdTyAvncwjKT.dWcD/ZHIo.
+        groups: [adm, cdrom, dip, plugdev, lxd, sudo]
+        lock-passwd: false
+        sudo: ALL=(ALL) NOPASSWD:ALL
+        shell: /bin/bash
+        ssh_authorized_keys:
+          - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDhjmuxHcocxOOqj1bnhxsS0WFEhfChQccmdyIISTt4kw2kGFIbm9jzrcEsOr+ZdvLaBErWgWy3k8tkU3SBLKos4Bi35NGTjupvL60vADo6nxj15UYcohhS4JO3ggUiVkCXlQKmtHtdIYeIYTsU32pcHoMXVq7UMzPyVplMy2cpJLOJe0vEu/gm+Wq79KGgshnWL1RAgUgfp6aNEsmmFeyL+zJ0jCpjMdNphx8yo+1Kjh07gRi1jcOoeBO7SwGqotySVXd8kYj+qREQc7QeXFTg/Gy1fMct+htdBPy2lCc/ftS9qRCi1ADd55KCJmUUpt1x3W+5xFUWlSZlJwqNeGgopXkjN5O3l9Nr5vrPj/NjMK5FXR2ljsAgkf/mY912CDdxlcvSvYHkyJky0l40/DGVvFCbMJ9vP7c7oDuNn4Bcp+1LG8Y1t9i2YS2L4qJVstFKsM+6aCdYDIu2Ed1B9oH72fyPfige1BGmBjUntBWdhw1pxwmGo2baFfNJEzi6eh8= icybu@LAPTOP-P75UTKU6

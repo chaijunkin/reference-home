@@ -1,0 +1,77 @@
+---
+# main.yml tasks for github_runner role
+
+# --------------  Pre-reqs & New Repos ------------------
+- name: Install GPG
+  apt:
+    name: gpg
+    state: present
+
+- name: Add Hashicorp apt key
+  ansible.builtin.apt_key:
+    url: https://apt.releases.hashicorp.com/gpg
+    state: present
+
+- name: Get distribution
+  command: lsb_release -cs
+  register: distro    
+
+- name: Add Hashicorp repository into sources list
+  apt_repository:
+    repo: "deb [arch=amd64] https://apt.releases.hashicorp.com {{ distro.stdout }} main"
+    state: present
+    update_cache: true
+
+- name: Add Ansible repository from PPA 
+  ansible.builtin.apt_repository:
+    repo: 'ppa:ansible/ansible' 
+
+
+# ------------------- Install Packer --------------------
+- name: Install Packer
+  apt:
+    name: packer
+
+# ------------------- Install Terraform --------------------
+- name: Install Terraform
+  apt:
+    name: terraform
+
+# --------------------- Install Ansible ----------------------
+- name: Install Ansible
+  apt:
+    name: ansible
+
+
+# ---------- GitHub Actions Runner Install & Config ---------
+# Ref: docs.github.com/en/actions/hosting-your-own-runners
+
+- name: Create tmp directory space
+  ansible.builtin.file:
+    path: /opt/github-actions-runner
+    state: directory
+
+- name: Download and unarchive GitHub Actions Runner
+  ansible.builtin.unarchive:
+    src: https://github.com/actions/runner/releases/download/v{{github_runner_version}}/actions-runner-linux-x64-{{github_runner_version}}.tar.gz
+    dest: /opt/github-actions-runner
+    remote_src: yes    
+
+- name: Configure GitHub Actions Runner
+  command: /opt/github-actions-runner/config.sh --url {{git_repo_url}} --token {{git_repo_token}} --unattended
+    #args:
+     # creates: /opt/github-actions-runner/config.sh
+  environment:
+    RUNNER_ALLOW_RUNASROOT: '1'
+
+- name: Install GitHub Actions Runner as Service
+  command: sudo ./svc.sh install root
+  args:
+    chdir: /opt/github-actions-runner
+ 
+- name: Start GitHub Actions Runner Service
+  command: sudo ./svc.sh start
+  args:
+    chdir: /opt/github-actions-runner  
+
+# ----------------------------------------------------------
