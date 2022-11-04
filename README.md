@@ -1,4 +1,4 @@
 # reference-home
-# reference-home
-# reference-home
-# reference-home
+FORKED REPO FROM MULTIPLE REPO TO BUILD MY HOMELAB
+
+THANK YOU FOR REFERENCE FROM OTHER REPOSITORY!
